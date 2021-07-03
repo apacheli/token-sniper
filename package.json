@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "eris": "^0.15.1"
+  },
+  "scripts": {
+    "fmt": "deno fmt main.js README.md",
+    "lint": "deno lint main.js README.md"
+  }
+}
