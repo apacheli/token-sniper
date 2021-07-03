@@ -4,7 +4,6 @@ const { default: fetch, Headers } = require("node-fetch");
 
 const client = Eris(process.env["DISCORD_TOKEN"], {
   intents: ["guildMessages"],
-  messageLimit: 0,
 });
 
 // Eris does not have a native way of setting identify presence. YIKES
@@ -18,17 +17,13 @@ const TOKEN_REGEXP =
   /(mfa\.)?(?<id>[A-Za-z0-9-_]{23,28})\.(?<timestamp>[A-Za-z0-9-_]{6,7})\.(?<hmac>[A-Za-z0-9-_]{27})/g;
 
 const DISCORD_EPOCH = 1420070400000n; // 2015
-const TOKEN_EPOCH = 1293840000000n; // 2011
 
 const validateToken = (token) => {
   try {
     const id = BigInt(Buffer.from(token.id, "base64").toString());
     const idTimestamp = (id >> 22n) + DISCORD_EPOCH;
-    const tokenTimestamp =
-      BigInt(Buffer.from(token.timestamp, "base64")) * 1000n + TOKEN_EPOCH;
 
-    return idTimestamp > DISCORD_EPOCH && idTimestamp < Date.now() &&
-      tokenTimestamp > TOKEN_EPOCH && tokenTimestamp < Date.now();
+    return idTimestamp > DISCORD_EPOCH && idTimestamp < Date.now();
   } catch {
     return false;
   }
